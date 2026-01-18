@@ -3,58 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Software Download</title>
+    <title>Maruthi Mobiles Manager Download</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 50px; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            text-align: center; 
+            padding: 50px; 
+            background-color: #f6f8fa;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1 { color: #24292f; margin-bottom: 10px; }
+        p { color: #57606a; margin-bottom: 30px; }
         .btn {
             background-color: #2ea44f;
             color: white;
             padding: 15px 32px;
             text-decoration: none;
-            font-size: 16px;
+            font-size: 18px;
+            font-weight: bold;
             border-radius: 6px;
             display: inline-block;
-            margin-top: 20px;
+            transition: background-color 0.2s;
         }
         .btn:hover { background-color: #2c974b; }
+        #version-text {
+            color: #57606a;
+            font-size: 14px;
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
 
-    <h1>Download My Application</h1>
-    <p>Click the button below to get the latest version.</p>
+    <div class="container">
+        <h1>Maruthi Mobiles Manager</h1>
+        <p>Download the latest version of the shop management tool.</p>
 
-    <a id="download-link" href="#" class="btn">Loading...</a>
-    
-    <p id="version-text" style="color: gray; font-size: 0.9em; margin-top: 10px;"></p>
+        <a id="download-link" href="#" class="btn">Checking for updates...</a>
+        
+        <div id="version-text"></div>
+    </div>
 
     <script>
-        // EDIT THESE TWO LINES
+        // Your Repository Details
         const user = 'nitheshd30';
-        const repo = 'https://github.com/nitheshd30/Maruthi-Mobiles';
+        const repo = 'Maruthi-Mobiles';
 
-        // This asks GitHub for the latest release data
+        // Fetch latest release from GitHub API
         fetch(`https://api.github.com/repos/${user}/${repo}/releases/latest`)
         .then(response => response.json())
         .then(data => {
-            // Find the asset that ends with .exe
+            // Filter for the .exe file
             const asset = data.assets.find(a => a.name.endsWith('.exe'));
             
             const link = document.getElementById('download-link');
             const versionText = document.getElementById('version-text');
 
             if (asset) {
+                // Set the link to the direct download URL
                 link.href = asset.browser_download_url;
-                link.innerText = `Download ${data.tag_name} (.exe)`;
-                versionText.innerText = `Latest version: ${data.name}`;
+                link.innerText = `Download ${data.tag_name} for Windows`;
+                
+                // Show version and release date
+                const date = new Date(data.published_at).toLocaleDateString();
+                versionText.innerHTML = `Latest Version: <strong>${data.tag_name}</strong><br>Released: ${date}`;
             } else {
-                link.innerText = "No .exe found in latest release";
+                link.innerText = "No Windows (.exe) file found";
                 link.style.backgroundColor = "gray";
+                link.style.cursor = "not-allowed";
             }
         })
         .catch(error => {
-            console.error('Error:', error);
-            document.getElementById('download-link').innerText = "Error loading download";
+            console.error('Error fetching release:', error);
+            document.getElementById('download-link').innerText = "Error loading download link";
         });
     </script>
 
