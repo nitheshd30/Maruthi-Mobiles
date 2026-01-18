@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Software Download</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 50px; }
+        .btn {
+            background-color: #2ea44f;
+            color: white;
+            padding: 15px 32px;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 6px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .btn:hover { background-color: #2c974b; }
+    </style>
+</head>
+<body>
+
+    <h1>Download My Application</h1>
+    <p>Click the button below to get the latest version.</p>
+
+    <a id="download-link" href="#" class="btn">Loading...</a>
+    
+    <p id="version-text" style="color: gray; font-size: 0.9em; margin-top: 10px;"></p>
+
+    <script>
+        // EDIT THESE TWO LINES
+        const user = 'nitheshd30';
+        const repo = 'https://github.com/nitheshd30/Maruthi-Mobiles';
+
+        // This asks GitHub for the latest release data
+        fetch(`https://api.github.com/repos/${user}/${repo}/releases/latest`)
+        .then(response => response.json())
+        .then(data => {
+            // Find the asset that ends with .exe
+            const asset = data.assets.find(a => a.name.endsWith('.exe'));
+            
+            const link = document.getElementById('download-link');
+            const versionText = document.getElementById('version-text');
+
+            if (asset) {
+                link.href = asset.browser_download_url;
+                link.innerText = `Download ${data.tag_name} (.exe)`;
+                versionText.innerText = `Latest version: ${data.name}`;
+            } else {
+                link.innerText = "No .exe found in latest release";
+                link.style.backgroundColor = "gray";
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('download-link').innerText = "Error loading download";
+        });
+    </script>
+
+</body>
+</html>
